@@ -581,21 +581,21 @@ If this is not a desired behavior, use `.revert()` to clear and unsaved local ch
 ```javascript
 // Save object
 const GameScore = Parse.Object.extend("GameScore");
-const localObject = new Parse.Object(GameScore);
-localObject.set('field', 'a');
-await localObject.save();
+const game = new GameScore();
 
-// Modify object locally without saving it
-localObject.set('field', 'b');
+game.set("field", "a");
 
 // Fetch local object from server
-const query = new Parse.Query(GameScore);
-const fetchedObject = await query.first();
+await game.save(null, { useMasterKey: true });
 
-// Determine field value
-fetchedObject.get('field'); // Returns value 'b'
-fetchedObject.revert();
-fetchedObject.get('field'); // Returns value 'a'
+// Modify object locally without saving it
+game.set("field", "b");
+
+game.get("field"); // Returns value 'b'
+
+game.revert()
+
+game.get("field"); // Returns value 'a'
 ```
 
 ## Read Preference
